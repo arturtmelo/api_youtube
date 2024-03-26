@@ -9,7 +9,7 @@ API_KEY = "AIzaSyDaVaIIPqUrAcLCHNf0x881HIy7wD96n6Q"
 # API YT
 youtube = build("youtube", "v3", developerKey=API_KEY)
 
-# Dicionário de tópicos e seus IDs correspondentes
+# Dicionário de tópicos/IDs correspondentes
 topics = {
     "História": "/m/05qt0",
     "História Antiga": "/m/04jpl",
@@ -20,7 +20,6 @@ topics = {
     "Arqueologia": "/m/0p83c",
     "História da Arte": "/m/09kqc",
     "Biografias Históricas": "/m/03b4p3",
-
 }
 
 
@@ -35,12 +34,11 @@ def search_videos():
     min_views = 1000000  # MIN DE VIEWS
 
     try:
-        topic_id = topics.get(topic)  # Obter o ID do tópico correspondente
+        topic_id = topics.get(topic)  # Obtem ID do tópico
 
-        # Definir palavras-chave adicionais com base no tópico selecionado
         additional_keywords = ""
         if topic == "História":
-            # Exemplo de palavra-chave adicional para história
+            # palavra-chave adicional para história
             additional_keywords = "documentário"
 
         search_response = youtube.search().list(
@@ -49,7 +47,6 @@ def search_videos():
             maxResults=10,  # NUM RESULTADOS
             order="viewCount",  # ORDENA POR VIEWS
             topicId=topic_id,  # ID TÓPICO
-            # Palavras-chave adicionais para refinar a pesquisa
             q=f"{topic} {additional_keywords}",
             relevanceLanguage="pt",
         ).execute()
@@ -71,16 +68,14 @@ def search_videos():
 
 def get_video_views(video_id):
     try:
-        # SOLICITAR DETALHES DO VIDEO
+        # SOLICITA DETALHES DO VIDEO
         video_response = youtube.videos().list(
             id=video_id,
             part="statistics"
         ).execute()
 
-        # EXTRAIR VIEWS
+        # EXTRAI VIEWS
         view_count = video_response["items"][0]["statistics"]["viewCount"]
-
-        # Format view count with commas
         formatted_view_count = "{:,}".format(int(view_count))
 
         return formatted_view_count
